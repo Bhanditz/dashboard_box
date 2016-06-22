@@ -24,28 +24,22 @@ void main() {
 }
 
 void _main() {
-  try {
-    _updateAnalysisChart();
-  } catch (error) {
-    print(error);
-  }
-
-  try {
-    _updateDartdocChart();
-  } catch (error) {
-    print(error);
-  }
-
-  try {
-    _updateRefreshChart();
-  } catch (error) {
-    print(error);
-  }
+  _update(_updateAnalysisChart);
+  _update(_updateDartdocChart);
+  _update(_updateRefreshChart);
 
   firebase = new Firebase("https://purple-butterfly-3000.firebaseio.com/");
   firebase.onAuth().listen((context) {
     _listenForChartChanges();
   });
+}
+
+void _update(void updateFn()) {
+  try {
+    updateFn();
+  } catch (error, stack) {
+    print('$error\n$stack');
+  }
 }
 
 void _listenForChartChanges() {
@@ -109,32 +103,20 @@ void _updateCharts() {
     return [time, repoMeasurements[time]?.time, galleryMeasurements[time]?.time];
   }).toList();
 
-  try {
-    _updateAnalysisChart(analysisData);
-  } catch (error) {
-    print(error);
-  }
+  _update(() => _updateAnalysisChart(analysisData));
 
   times = repoMeasurements.keys.toList()..sort();
   List dartdocData = times
     .map((int time) => [time, repoMeasurements[time].missingDartDocs])
     .where((List tuple) => tuple[1] != null)
     .toList();
-  try {
-    _updateDartdocChart(dartdocData);
-  } catch (error) {
-    print(error);
-  }
+  _update(() => _updateDartdocChart(dartdocData));
 
   times = refreshMeasurements.keys.toList()..sort();
   List refreshData = times
     .map((int time) => [time, refreshMeasurements[time].time])
     .toList();
-  try {
-    _updateRefreshChart(refreshData);
-  } catch (error) {
-    print(error);
-  }
+  _update(() => _updateRefreshChart(refreshData));
 }
 
 class Measurement {
