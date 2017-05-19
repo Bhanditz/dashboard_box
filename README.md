@@ -1,4 +1,6 @@
-# Scripts for Flutter's performance lab and dashboard
+# OBSOLETE
+
+## Scripts for Flutter's performance lab and dashboard
 
 [![Build Status](https://travis-ci.org/flutter/dashboard_box.svg?branch=master)](https://travis-ci.org/flutter/dashboard_box)
 
